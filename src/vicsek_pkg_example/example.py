@@ -1,64 +1,100 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+import time
+import math
 
-# Parameters
-n = 500
-r_interact = 0.1  # Increased for visible swarming
-v = 0.03
-eta = 0.05          # Noise magnitude
+plt.rcParams['animation.embed_limit'] = 300
+
+n = 200
+d = 0.01
+v = 0.01
 dt = 1
+eta = 0.1
 
-# Initialize
-pos = np.random.rand(n, 2)
-theta = np.random.uniform(-np.pi, np.pi, n)
+r = np.random.random((n, 2))
+theta = np.random.random(n)
 
 fig, ax = plt.subplots(figsize=(6, 6))
-q = ax.quiver(pos[:, 0], pos[:, 1], np.cos(theta), np.sin(theta), color='b')
+
+x = r[:, 0]
+y = r[:, 1]
+u = np.cos(2 * np.pi * theta)
+vv = np.sin(2 * np.pi * theta)
+
+q = ax.quiver(x, y, u, vv, angles='xy')
 ax.set_xlim(0, 1)
 ax.set_ylim(0, 1)
+ax.set_title("Vicsek Model")
+
+counter = 0
+
+
+def distance(p1, p2):
+    return np.sqrt(((p1 - p2) ** 2).sum())
+
 
 def update_model():
-    global pos, theta
-    
-    # 1. Calculate all-to-all distances using broadcasting
-    # dx.shape will be (n, n)
-    dx = pos[:, 0, np.newaxis] - pos[:, 0]
-    dy = pos[:, 1, np.newaxis] - pos[:, 1]
-    
-    # Apply periodic distance (closest path in a wrap-around box)
-    dx = (dx + 0.5) % 1 - 0.5
-    dy = (dy + 0.5) % 1 - 0.5
-    
-    dist = np.sqrt(dx**2 + dy**2)
-    
-    # 2. Find neighbors within interaction radius
-    adj = dist < r_interact
-    
-    # 3. Average the angles of neighbors
-    new_theta = theta.copy()
+    global r, theta, counter
+
     for i in range(n):
-        neighbors_theta = theta[adj[i]]
-        avg_sin = np.mean(np.sin(neighbors_theta))
-        avg_cos = np.mean(np.cos(neighbors_theta))
-        new_theta[i] = np.arctan2(avg_sin, avg_cos)
-    
-    # 4. Add noise and update heading
-    theta = new_theta + eta * np.random.uniform(-np.pi, np.pi, n)
-    
-    # 5. Move particles
-    pos[:, 0] += v * np.cos(theta) * dt
-    pos[:, 1] += v * np.sin(theta) * dt
-    
-    # 6. Periodic Boundary Conditions
-    pos = pos % 1
+        sum_sin = 0
+        sum_cos = 0
+        neighbours = 0
+
+        for j in range(n):
+            if i != j:
+                if distance(r[i], r[j]) < d:
+                    theta_j = 2 * np.pi * theta[j]
+                    sum_sin = sum_sin + np.sin(theta_j)
+                    sum_cos = sum_cos + np.cos(theta_j)
+                    neighbours = neighbours + 1
+
+        if neighbours > 0:
+            avg_theta = np.arctan2(sum_sin / neighbours, sum_cos / neighbours)
+            theta[i] = (avg_theta / (2 * np.pi)) + eta * (np.random.rand() - 0.5)
+
+        dx = v * dt * np.cos(2 * np.pi * theta[i])
+        dy = v * dt * np.sin(2 * np.pi * theta[i])
+
+        r[i, 0] = r[i, 0] + dx
+        r[i, 1] = r[i, 1] + dy
+
+        if r[i, 0] > 1:
+            r[i, 0] = 0
+        if r[i, 1] > 1:
+            r[i, 1] = 0
+        if r[i, 0] < 0:
+            r[i, 0] = 1
+        if r[i, 1] < 0:
+            r[i, 1] = 1
+
+        counter = counter + 1
+
 
 def animate(frame):
+    global q
+
     update_model()
-    q.set_offsets(pos)
-    q.set_UVC(np.cos(theta), np.sin(theta))
+
+    x = []
+    y = []
+    u = []
+    vv = []
+
+    for i in range(n):
+        x.append(r[i, 0])
+        y.append(r[i, 1])
+        u.append(np.cos(2 * np.pi * theta[i]))
+        vv.append(np.sin(2 * np.pi * theta[i]))
+
+    q.set_offsets(np.c_[x, y])
+    q.set_UVC(u, vv)
+
+    print("frame", frame, "counter", counter)
+
     return q,
 
-#if __name__ == "__main__":
-ani = FuncAnimation(fig, animate, frames=200, interval=30, blit=True)
+
+ani = FuncAnimation(fig, animate, frames=200, interval=50, blit=True)
 plt.show()
