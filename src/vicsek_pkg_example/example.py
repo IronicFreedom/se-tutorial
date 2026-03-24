@@ -1,6 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+import click
+
+@click.command()
+@click.option('-n', '--num', default=200, help='Number of elements.')
+
+def test(num):
+    """Simple function that returns the CLI --num input"""
+    click.echo(f"Input was this: {num}")
 
 plt.rcParams['animation.embed_limit'] = 300
 
@@ -93,6 +101,6 @@ def animate(frame):
 
     return q,
 
-
+test()
 ani = FuncAnimation(fig, animate, frames=200, interval=50, blit=True)
 plt.show()
