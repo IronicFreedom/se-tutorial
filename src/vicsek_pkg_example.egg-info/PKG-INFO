@@ -1,0 +1,10 @@
+Metadata-Version: 2.4
+Name: vicsek_pkg_example
+Version: 0.1.0
+Summary: This is an example project containing a vicsek model.
+Author-email: Johann Thurn <johann.thurn@dlr.de>
+Requires-Python: >=3.12
+License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: matplotlib
+Dynamic: license-file

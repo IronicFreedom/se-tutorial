@@ -1,0 +1,12 @@
+[project]
+authors = [
+	{ name = "Johann Thurn", email = "johann.thurn@dlr.de" }
+]
+requires-python = ">=3.12"
+name = "vicsek_pkg_example"
+version = "0.1.0"
+description = "This is an example project containing a vicsek model."
+dependencies = [
+	"numpy",
+	"matplotlib"
+]
