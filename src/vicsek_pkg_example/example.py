@@ -1,8 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
-import time
-import math
 
 plt.rcParams['animation.embed_limit'] = 300
 
