@@ -122,6 +122,6 @@ btn_continue = Button(ax_continue, "Continue")
 btn_stop.on_clicked(stop)
 btn_continue.on_clicked(cont)
 
-test()
 ani = FuncAnimation(fig, animate, frames=200, interval=50, blit=True)
 plt.show()
+test()
