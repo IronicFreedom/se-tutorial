@@ -115,8 +115,8 @@ def cont(frame):
     print("Animation continued")
 
 # --- Create buttons ---
-ax_stop = plt.axes([0.7, 0.05, 0.1, 0.075])
-ax_continue = plt.axes([0.81, 0.05, 0.1, 0.075])
+ax_stop = plt.axes([0.65, 0.90, 0.15, 0.075])
+ax_continue = plt.axes([0.80, 0.90, 0.15, 0.075])
 btn_stop = Button(ax_stop, "Stop")
 btn_continue = Button(ax_continue, "Continue")
 btn_stop.on_clicked(stop)
