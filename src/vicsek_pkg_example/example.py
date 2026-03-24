@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+from matplotlib.widgets import Button
 
 plt.rcParams['animation.embed_limit'] = 300
 
@@ -30,44 +31,45 @@ counter = 0
 
 def distance(p1, p2):
     return np.sqrt(((p1 - p2) ** 2).sum())
-
+# --- Control variables ---
+running = True  # whether animation is running
 
 def update_model():
     global r, theta, counter
+    if running:
+        for i in range(n):
+            sum_sin = 0
+            sum_cos = 0
+            neighbours = 0
 
-    for i in range(n):
-        sum_sin = 0
-        sum_cos = 0
-        neighbours = 0
+            for j in range(n):
+                if i != j:
+                    if distance(r[i], r[j]) < d:
+                        theta_j = 2 * np.pi * theta[j]
+                        sum_sin = sum_sin + np.sin(theta_j)
+                        sum_cos = sum_cos + np.cos(theta_j)
+                        neighbours = neighbours + 1
 
-        for j in range(n):
-            if i != j:
-                if distance(r[i], r[j]) < d:
-                    theta_j = 2 * np.pi * theta[j]
-                    sum_sin = sum_sin + np.sin(theta_j)
-                    sum_cos = sum_cos + np.cos(theta_j)
-                    neighbours = neighbours + 1
+            if neighbours > 0:
+                avg_theta = np.arctan2(sum_sin / neighbours, sum_cos / neighbours)
+                theta[i] = (avg_theta / (2 * np.pi)) + eta * (np.random.rand() - 0.5)
 
-        if neighbours > 0:
-            avg_theta = np.arctan2(sum_sin / neighbours, sum_cos / neighbours)
-            theta[i] = (avg_theta / (2 * np.pi)) + eta * (np.random.rand() - 0.5)
+            dx = v * dt * np.cos(2 * np.pi * theta[i])
+            dy = v * dt * np.sin(2 * np.pi * theta[i])
 
-        dx = v * dt * np.cos(2 * np.pi * theta[i])
-        dy = v * dt * np.sin(2 * np.pi * theta[i])
+            r[i, 0] = r[i, 0] + dx
+            r[i, 1] = r[i, 1] + dy
 
-        r[i, 0] = r[i, 0] + dx
-        r[i, 1] = r[i, 1] + dy
+            if r[i, 0] > 1:
+                r[i, 0] = 0
+            if r[i, 1] > 1:
+                r[i, 1] = 0
+            if r[i, 0] < 0:
+                r[i, 0] = 1
+            if r[i, 1] < 0:
+                r[i, 1] = 1
 
-        if r[i, 0] > 1:
-            r[i, 0] = 0
-        if r[i, 1] > 1:
-            r[i, 1] = 0
-        if r[i, 0] < 0:
-            r[i, 0] = 1
-        if r[i, 1] < 0:
-            r[i, 1] = 1
-
-        counter = counter + 1
+            counter = counter + 1
 
 
 def animate(frame):
@@ -93,6 +95,24 @@ def animate(frame):
 
     return q,
 
+# --- Button callbacks ---
+def stop(frame):
+    global running
+    running = False
+    print("Animation stopped")
+
+def cont(frame):
+    global running
+    running = True
+    print("Animation continued")
+
+# --- Create buttons ---
+ax_stop = plt.axes([0.7, 0.05, 0.1, 0.075])
+ax_continue = plt.axes([0.81, 0.05, 0.1, 0.075])
+btn_stop = Button(ax_stop, "Stop")
+btn_continue = Button(ax_continue, "Continue")
+btn_stop.on_clicked(stop)
+btn_continue.on_clicked(cont)
 
 ani = FuncAnimation(fig, animate, frames=200, interval=50, blit=True)
 plt.show()
