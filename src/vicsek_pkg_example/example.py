@@ -2,6 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from matplotlib.widgets import Button
+import click
+
+@click.command()
+@click.option('-n', '--num', default=200, help='Number of elements.')
+
+def test(num):
+    """Simple function that returns the CLI --num input"""
+    click.echo(f"Input was this: {num}")
 
 plt.rcParams['animation.embed_limit'] = 300
 
@@ -114,5 +122,6 @@ btn_continue = Button(ax_continue, "Continue")
 btn_stop.on_clicked(stop)
 btn_continue.on_clicked(cont)
 
+test()
 ani = FuncAnimation(fig, animate, frames=200, interval=50, blit=True)
 plt.show()
