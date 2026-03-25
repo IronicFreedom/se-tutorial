@@ -97,5 +97,5 @@ ax_stop = plt.axes([0.4, 0.05, 0.2, 0.075])
 btn_stop = Button(ax_stop, 'Stop')
 btn_stop.on_clicked(vis.toggle)
 
-ani = FuncAnimation(fig, update, interval=30, blit=True)
+ani = FuncAnimation(fig, update, interval=30, blit=True, save_count=5)
 plt.show()

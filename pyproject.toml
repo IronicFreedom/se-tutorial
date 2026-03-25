@@ -9,5 +9,6 @@ description = "This is an example project containing a vicsek model."
 dependencies = [
 	"numpy",
 	"matplotlib",
-	"click"
+	"click",
+	"pytest"
 ]
