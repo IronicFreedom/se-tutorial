@@ -18,84 +18,13 @@ class VicsekModel:
 
     @staticmethod
     def distances(r, i):
-        """
-        Distances from the ith entry
-        Parameters
-        -----------
-        r   :   np.array
-                numpy array with point coordinates for n entries
-        i   :   int
-                index for i-th vector entry
-        Returns
-        -----------
-        np.array
-            distances to i-th entry
-        """
         return np.linalg.norm(r - r[i], axis=1)
     
     @staticmethod
-    def neighbors_idx(distances, d): 
-        """
-        Return the indices of particles that are within a given distance.
-
-        This static method identifies all neighbors of a particle based on a
-        distance array and a specified cutoff distance `d`.
-
-        Parameters
-        ----------
-        distances : ndarray of shape (n,)
-        Array containing distances from a reference particle to all other particles.
-        d : float
-        Cutoff distance to determine neighbors.
-
-        Returns
-        -------
-        ndarray of int
-        Indices of particles whose distance is less than `d`.
-
-        Notes
-        -----
-        - Typically used in the Vicsek model to find neighboring particles
-        for computing local average orientations.
-        - Does not include the reference particle itself unless its distance is < `d`.
-        """ 
- 
-
+    def neighbors_idx(distances, d):
         return np.where(distances < d)[0]
 
     def update_model(self):
-        """
-        Update the positions and orientations of all particles in the Vicsek model.
-
-        This method performs one time step of the Vicsek model, including:
-        - Computing the average orientation of neighbors within a distance `d`.
-        - Adding uniform noise to the orientation.
-        - Updating the particle positions based on the updated orientations and velocity `v`.
-        - Applying periodic boundary conditions to keep particles within the simulation box.
-
-        Notes
-        -----
-        - Distances are computed using `VicsekModel.distances`.
-        - Neighbors are determined using `VicsekModel.neighbors_idx`.
-        - Orientations are normalized to the range [0, 1].
-        - Positions are wrapped around using modulo `L` for periodic boundaries.
-
-        Updates
-        -------
-        self.theta : ndarray of shape (n,)
-        Updated orientations of all particles.
-        self.r : ndarray of shape (n, 2)
-        Updated positions of all particles.
-
-        Parameters
-        ----------
-        None
-
-        Returns
-        -------
-        None
-        """
-
         new_theta = self.theta.copy()
         
         for i in range(self.n):
