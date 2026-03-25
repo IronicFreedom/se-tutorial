@@ -55,47 +55,47 @@ class VicsekModel:
         self.r[:, 1] = (self.r[:, 1] + dy) % self.L
 
 # --- Animation Setup ---
+if __name__ == "__main__":
+    model = VicsekModel(n=500)
+    fig, ax = plt.subplots(figsize=(6, 6))
+    plt.subplots_adjust(bottom=0.2)
 
-model = VicsekModel(n=500)
-fig, ax = plt.subplots(figsize=(6, 6))
-plt.subplots_adjust(bottom=0.2)
+    # Initial direction vectors for Quiver
+    u = np.cos(2 * np.pi * model.theta)
+    v = np.sin(2 * np.pi * model.theta)
 
-# Initial direction vectors for Quiver
-u = np.cos(2 * np.pi * model.theta)
-v = np.sin(2 * np.pi * model.theta)
+    # Quiver plot: positions (r), directions (u, v), and color by theta
+    q = ax.quiver(model.r[:, 0], model.r[:, 1], u, v, model.theta, 
+                  cmap='hsv', clim=(0, 1), pivot='middle', width=0.005)
 
-# Quiver plot: positions (r), directions (u, v), and color by theta
-q = ax.quiver(model.r[:, 0], model.r[:, 1], u, v, model.theta, 
-              cmap='hsv', clim=(0, 1), pivot='middle', width=0.005)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.set_aspect('equal')
 
-ax.set_xlim(0, 1)
-ax.set_ylim(0, 1)
-ax.set_aspect('equal')
+    def update(frame):
+        if model.running:
+            model.update_model()
+            
+            # Update Quiver Positions
+            q.set_offsets(model.r)
+            
+            # Update Quiver Directions
+            u_new = np.cos(2 * np.pi * model.theta)
+            v_new = np.sin(2 * np.pi * model.theta)
+            q.set_UVC(u_new, v_new, model.theta) # Third arg updates colors
+            
+        return q,
 
-def update(frame):
-    if model.running:
-        model.update_model()
-        
-        # Update Quiver Positions
-        q.set_offsets(model.r)
-        
-        # Update Quiver Directions
-        u_new = np.cos(2 * np.pi * model.theta)
-        v_new = np.sin(2 * np.pi * model.theta)
-        q.set_UVC(u_new, v_new, model.theta) # Third arg updates colors
-        
-    return q,
+    # UI Buttons
+    class Visualizer:
+        def toggle(self, event):
+            model.running = not model.running
+            btn_stop.label.set_text('Start' if not model.running else 'Stop')
 
-# UI Buttons
-class Visualizer:
-    def toggle(self, event):
-        model.running = not model.running
-        btn_stop.label.set_text('Start' if not model.running else 'Stop')
+    vis = Visualizer()
+    ax_stop = plt.axes([0.4, 0.05, 0.2, 0.075])
+    btn_stop = Button(ax_stop, 'Stop')
+    btn_stop.on_clicked(vis.toggle)
 
-vis = Visualizer()
-ax_stop = plt.axes([0.4, 0.05, 0.2, 0.075])
-btn_stop = Button(ax_stop, 'Stop')
-btn_stop.on_clicked(vis.toggle)
-
-ani = FuncAnimation(fig, update, interval=30, blit=True, save_count=5)
-plt.show()
+    ani = FuncAnimation(fig, update, interval=30, blit=True, save_count=5)
+    plt.show()
