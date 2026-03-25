@@ -18,6 +18,18 @@ class VicsekModel:
 
     @staticmethod
     def distances(r, i):
+        """Distances from the ith entry
+        Parameters
+        -----------
+        r   :   np.array
+                numpy array with point coordinates for n entries
+        i   :   int
+                index for i-th vector entry
+        Returns
+        -----------
+        np.array
+            distances to i-th entry
+        """
         return np.linalg.norm(r - r[i], axis=1)
     
     @staticmethod
