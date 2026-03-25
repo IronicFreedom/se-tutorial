@@ -10,5 +10,6 @@ dependencies = [
 	"numpy",
 	"matplotlib",
 	"click",
-	"pytest"
+	"pytest",
+	"src"
 ]
