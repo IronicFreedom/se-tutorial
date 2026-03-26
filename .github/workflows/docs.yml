@@ -12,6 +12,11 @@ on:
 # security: restrict permissions for CI jobs.
 permissions:
   contents: read
+ 
+# Prevents multiple deployments from running at the same time
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   # Build the documentation and upload the static HTML files as an artifact.
@@ -29,7 +34,7 @@ jobs:
       - run: pip install -e .
       # ADJUST THIS: build your documentation into docs/.
       # We use a custom build script for pdoc itself, ideally you just run `pdoc -o docs/ ...` here.
-      - run: pdoc vicsek_pkg_example -o docs #-d numpy
+      - run: pdoc vicsek_pkg_example -o docs -d numpy
 
       - uses: actions/upload-pages-artifact@v4
         with:
