@@ -158,11 +158,18 @@ if __name__ == "__main__":
         def toggle(self, event):
             model.running = not model.running
             btn_stop.label.set_text('Start' if not model.running else 'Stop')
+        def randomize(self, event):
+            # model.r = np.random.random((model.n, 2))
+            model.theta = np.random.random(model.n) 
+            btn_rnd.label.set_text('Randomize')
 
     vis = Visualizer()
     ax_stop = plt.axes([0.4, 0.05, 0.2, 0.075])
     btn_stop = Button(ax_stop, 'Stop')
     btn_stop.on_clicked(vis.toggle)
+    ax_rnd = plt.axes([0.65, 0.05, 0.2, 0.075])
+    btn_rnd = Button(ax_rnd, 'Randomize')
+    btn_rnd.on_clicked(vis.randomize)
 
     ani = FuncAnimation(fig, update, interval=30, blit=True, save_count=5)
     plt.show()
