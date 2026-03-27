@@ -1,3 +1,7 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
 authors = [
 	{ name = "Johann Thurn", email = "johann.thurn@dlr.de" }
@@ -13,3 +17,12 @@ dependencies = [
 	"pytest",
 	"pdoc"
 ]
+
+[tool.pixi.workspace]
+channels = ["conda-forge", "bioconda", "pytorch", "quantstack", "menpo"]
+platforms = ["win-64", "linux-64", "osx-arm64"]
+
+[tool.pixi.pypi-dependencies]
+vicsek_pkg_example = { path = ".", editable = true }
+
+[tool.pixi.tasks]
