@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         # Hier kannst du weitere Versionen hinzufügen, z.B. "3.11", "3.13"
-        python-version: ["3.12"]
+        python-version: ["3.11", "3.12", "3.13"]
 
     steps:
     - name: Checkout code
