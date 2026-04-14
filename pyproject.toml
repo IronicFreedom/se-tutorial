@@ -25,8 +25,8 @@ channels = ["conda-forge"]
 platforms = ["win-64", "linux-64", "osx-arm64"]
 
 [tool.pixi.environments]
-# Pixi wird angewiesen, das 'test' Extra aus [project] mit zu installieren
-default = { features = ["test"], solve-group = "default" }
+# Pixi wird angewiesen, das 'test' Extra aus [project.optional-dependencies] mit zu installieren
+default = { features = ["test", "dev"], solve-group = "default" }
 
 [tool.pixi.pypi-dependencies]
 vicsek_pkg_example = { path = ".", editable = true }
@@ -42,3 +42,6 @@ fmt = "ruff format ."
 fix = "ruff check . --fix"
 test = "pytest test/"
 build = "python -m build"
+
+[tool.pixi.feature.dev.dependencies]
+pre-commit = "*"

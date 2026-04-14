@@ -1,0 +1,15 @@
+repos:
+  - repo: local
+    hooks:
+      - id: pixi-update
+        name: pixi-update
+        entry: pixi install
+        language: system
+        files: ^(pyproject\.toml|pixi\.lock)$
+        pass_filenames: false
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.10
+    hooks:
+      - id: ruff
+        args: [ --fix ]
+      - id: ruff-format
