@@ -29,6 +29,10 @@ jobs:
         # locked: true setzt voraus, dass du die pixi.lock eingecheckt hast
         locked: true
 
+    - name: Update Lockfile (Optionaler Check)
+      # Dieser Schritt stellt sicher, dass die Umgebung absolut frisch ist
+      run: pixi update --frozen
+
       # Linter definiert in pyproject.toml
     - name: Lint with ruff
       run: pixi run lint

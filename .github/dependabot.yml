@@ -1,0 +1,14 @@
+version: 2
+updates:
+  # 1. Automatische Updates für deine GitHub Actions (z.B. setup-pixi)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+# Nicht unbedingt kompatibel mit Pixi, da nur pip unterstützt wird
+  # # 2. Automatische Updates für deine Python-Pakete (pyproject.toml)
+  # - package-ecosystem: "pip"
+  #   directory: "/"
+  #   schedule:
+  #     interval: "weekly"
