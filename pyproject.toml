@@ -26,3 +26,4 @@ platforms = ["win-64", "linux-64", "osx-arm64"]
 vicsek_pkg_example = { path = ".", editable = true }
 
 [tool.pixi.tasks]
+start = "python src/vicsek_pkg_example/test2.py"
