@@ -14,16 +14,31 @@ dependencies = [
 	"numpy",
 	"matplotlib",
 	"click",
-	"pytest",
 	"pdoc"
 ]
+
+[project.optional-dependencies]
+test = ["pytest"] # Für pip install .[test]
 
 [tool.pixi.workspace]
 channels = ["conda-forge"]
 platforms = ["win-64", "linux-64", "osx-arm64"]
 
+[tool.pixi.environments]
+# Pixi wird angewiesen, das 'test' Extra aus [project] mit zu installieren
+default = { features = ["test"], solve-group = "default" }
+
 [tool.pixi.pypi-dependencies]
 vicsek_pkg_example = { path = ".", editable = true }
+#pytest = "*" # nur aktivieren, falls nicht mehr in [project.optional-dependencies]
+
+[tool.pixi.dependencies]
+ruff = ">=0.3.0"
 
 [tool.pixi.tasks]
 start = "python src/vicsek_pkg_example/test2.py"
+lint = "ruff check ."
+fmt = "ruff format ."
+fix = "ruff check . --fix"
+test = "pytest test/"
+build = "python -m build"
