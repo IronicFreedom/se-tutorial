@@ -33,7 +33,6 @@ vicsek_pkg_example = { path = ".", editable = true }
 #pytest = "*" # nur aktivieren, falls nicht mehr in [project.optional-dependencies]
 
 [tool.pixi.dependencies]
-ruff = ">=0.3.0"
 
 [tool.pixi.tasks]
 start = "python src/vicsek_pkg_example/test2.py"
@@ -44,4 +43,6 @@ test = "pytest test/"
 build = "python -m build"
 
 [tool.pixi.feature.dev.dependencies]
+ruff = ">=0.3.0"
 pre-commit = "*"
+# pytest = "*" # kann zusätzlich zum test-Feature von [project] aktiviert werden

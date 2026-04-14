@@ -1656,7 +1656,7 @@ packages:
 - pypi: ./
   name: vicsek-pkg-example
   version: 0.1.0
-  sha256: a1aaae3a255940a1172433bb8e990427aa467a005165fcd663a921d88eb6bc0c
+  sha256: 147081942263b73411a64724983ca95010d9271b3a66ea9661966448dc54d251
   requires_dist:
   - numpy
   - matplotlib
